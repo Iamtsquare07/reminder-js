@@ -1,0 +1,83 @@
+body {
+    background-color: #000014;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    overflow-y: auto;
+    color: #c2c5ff;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: rgba(0, 255, 85, 0.466);
+    font-family: 'Croissant One', cursive;
+}
+
+h1 {
+    font-size: 5vw;
+}
+
+.root {
+    width: 90%;
+    margin: auto;
+    padding: 10px;
+    text-align: center;
+}
+
+#reminderInput {
+    width: 60%;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+#reminderList {
+    list-style-type: none;
+    padding: 0;
+}
+
+.reminderItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 8px;
+    margin-bottom: 8px;
+}
+
+.deleteBtn {
+    cursor: pointer;
+    color: red;
+    font-weight: bold;
+}
+
+button {
+    width: fit-content;
+    border-radius:5px;
+    padding: 9px;
+    background-color:#31a0fc;
+    border: 1px solid #31a0fc;
+}
+
+@media only screen and (min-width: 1200px) {
+    .root {
+        width: 60%;
+        border-radius: 10px;
+        box-shadow: 1px 1px 5px 1px #1b37b4;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+
+    #reminderInput {
+        width: 50%;
+    }
+    
+}
