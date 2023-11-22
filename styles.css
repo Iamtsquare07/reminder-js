@@ -38,7 +38,7 @@ h1 {
 
 .input-fields {
     display: flex;
-    align-items:center;
+    align-items: center;
     justify-content: center;
     margin-bottom: 10px;
 }
@@ -47,14 +47,30 @@ h1 {
     width: 60%;
     padding: 8px;
     outline: none;
-    border-radius:3px 0 0 5px;
+    border-radius: 3px 0 0 5px;
     border: 1px solid white;
 }
 
 #set-btn {
-    margin-left:0;
-    border-radius:0 5px 5px 0px;
+    margin-left: 0;
+    border-radius: 0 5px 5px 0px;
     padding: 8px;
+}
+
+#time-container {
+    display: flex;
+    align-items:center;
+    justify-content: center;
+}
+
+.time {
+    width: 64%;
+    padding: 8px;
+    border:1px solid rgba(149, 185, 238, 0.63);
+    display: flex;
+    align-items:center;
+    justify-content: space-between;
+    border-radius:5px;
 }
 
 #reminderList {
@@ -79,11 +95,76 @@ h1 {
 
 button {
     width: fit-content;
-    border-radius:5px;
+    border-radius: 5px;
     padding: 5px;
-    background-color:#31a0fc;
+    background-color: #31a0fc;
     border: 1px solid #31a0fc;
 }
+
+#timePickerContainer {
+    display: none;
+}
+
+/* Styles for sliding toggle switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 17px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 13px;
+    width: 13px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+}
+
+input:checked+.slider {
+    background-color: #2196F3;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(13px);
+    -ms-transform: translateX(13px);
+    transform: translateX(13px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 17px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* End Styles for sliding toggle switch */
 
 @media only screen and (min-width: 1200px) {
     .root {
@@ -98,5 +179,9 @@ button {
     #reminderInput {
         width: 50%;
     }
-    
+
+    .time {
+        width: 54.5%;
+    }
+
 }
