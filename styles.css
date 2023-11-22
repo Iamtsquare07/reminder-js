@@ -44,7 +44,7 @@ h1 {
 }
 
 #reminderInput {
-    width: 60%;
+    width: 69%;
     padding: 8px;
     outline: none;
     border-radius: 3px 0 0 5px;
@@ -64,7 +64,7 @@ h1 {
 }
 
 .time {
-    width: 64%;
+    width: 80%;
     padding: 8px;
     border:1px solid rgba(149, 185, 238, 0.63);
     display: flex;
@@ -99,10 +99,29 @@ button {
     padding: 5px;
     background-color: #31a0fc;
     border: 1px solid #31a0fc;
+    cursor: pointer;
+}
+
+.reminders {
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    margin-top: 100px;
 }
 
 #timePickerContainer {
     display: none;
+    margin-top: 10px;
+}
+
+#reminderList {
+    width: 80%;
+}
+
+.reminderItem {
+    background-color:#1a2349;
+    border-radius:10px;
+    border: 1px solid #1a2349
 }
 
 /* Styles for sliding toggle switch */
@@ -166,6 +185,16 @@ input:checked+.slider:before {
 
 /* End Styles for sliding toggle switch */
 
+@media only screen and (min-width: 820px) {
+    #reminderInput {
+        width: 60%;
+    }
+    
+    .time {
+        width: 64%;
+    }
+}
+
 @media only screen and (min-width: 1200px) {
     .root {
         width: 60%;
@@ -182,6 +211,10 @@ input:checked+.slider:before {
 
     .time {
         width: 54.5%;
+    }
+
+    #reminderList {
+        width: 60%;
     }
 
 }
