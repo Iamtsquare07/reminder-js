@@ -59,18 +59,18 @@ h1 {
 
 #time-container {
     display: flex;
-    align-items:center;
+    align-items: center;
     justify-content: center;
 }
 
 .time {
     width: 80%;
     padding: 8px;
-    border:1px solid rgba(149, 185, 238, 0.63);
+    border: 1px solid rgba(149, 185, 238, 0.63);
     display: flex;
-    align-items:center;
+    align-items: center;
     justify-content: space-between;
-    border-radius:5px;
+    border-radius: 5px;
 }
 
 #reminderList {
@@ -104,7 +104,7 @@ button {
 
 .reminders {
     display: flex;
-    align-items:center;
+    align-items: center;
     justify-content: center;
     margin-top: 100px;
 }
@@ -119,8 +119,8 @@ button {
 }
 
 .reminderItem {
-    background-color:#1a2349;
-    border-radius:10px;
+    background-color: #1a2349;
+    border-radius: 10px;
     border: 1px solid #1a2349
 }
 
@@ -189,7 +189,7 @@ input:checked+.slider:before {
     #reminderInput {
         width: 60%;
     }
-    
+
     .time {
         width: 64%;
     }
