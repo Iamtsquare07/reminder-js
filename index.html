@@ -18,6 +18,26 @@
       <input type="text" id="reminderInput" placeholder="Enter your reminder">
       <button id="set-btn" onclick="addReminder()">Set</button>
     </div>
+    <div id="time-container">
+      <div class="time">
+        <div>Time</div>
+        <label class="switch">
+          <input id="switch-time" type="checkbox" onclick="toggleTimePicker()">
+          <span class="slider round"></span>
+      </label>
+      </div>
+    </div>
+    <div class="set-time">
+      <div id="timePickerContainer">
+        <label for="timePicker">Pick a time:</label>
+        <input type="time" id="timePicker">
+        <button onclick="setReminder('1h')">1 hour from now</button>
+        <button onclick="setReminder('12:00')">Today at 12 PM</button>
+        <button onclick="setReminder('18:00')">Today at 6 PM</button>
+        <button onclick="setReminder('21:00')">Today at 9 PM</button>
+        
+      </div>
+    </div>
 
     <ul id="reminderList"></ul>
   </div>
