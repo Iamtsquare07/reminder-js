@@ -1,3 +1,5 @@
+let reminderInterval;
+
 function addReminder() {
   const reminderInput = document.getElementById("reminderInput");
   const reminderList = document.getElementById("reminderList");
@@ -40,42 +42,18 @@ function deleteReminder(reminderItem) {
   }
 }
 
-function saveToLocalStorage(reminder) {
+function saveToLocalStorage(reminderData) {
   let reminders = JSON.parse(localStorage.getItem("reminders")) || [];
-  reminders.push(reminder);
+  reminders.push(reminderData);
   localStorage.setItem("reminders", JSON.stringify(reminders));
 }
 
-function removeFromLocalStorage(reminder) {
+function removeFromLocalStorage(reminderText) {
   let reminders = JSON.parse(localStorage.getItem("reminders")) || [];
-  reminders = reminders.filter((item) => item !== reminder);
+  reminders = reminders.filter((item) => item.text !== reminderText);
   localStorage.setItem("reminders", JSON.stringify(reminders));
 }
 
-// Load reminders from localStorage on page load
-document.addEventListener("DOMContentLoaded", function () {
-  const reminderList = document.getElementById("reminderList");
-  const reminders = JSON.parse(localStorage.getItem("reminders")) || [];
-
-  reminders.forEach((reminder) => {
-    const reminderItem = document.createElement("li");
-    reminderItem.className = "reminderItem";
-
-    const deleteBtn = document.createElement("span");
-    deleteBtn.className = "deleteBtn";
-    deleteBtn.innerText = "Delete";
-    deleteBtn.onclick = function () {
-      deleteReminder(reminderItem);
-    };
-
-    reminderItem.innerHTML = `${reminder}`;
-    reminderItem.appendChild(deleteBtn);
-
-    reminderList.appendChild(reminderItem);
-  });
-});
-
-// Add this function to your script
 function setReminder(defaultTime) {
   const timePicker = document.getElementById("timePicker");
   const reminderList = document.getElementById("reminderList");
@@ -114,16 +92,60 @@ function setReminder(defaultTime) {
   reminderList.appendChild(reminderItem);
 
   // Save to localStorage
-  saveToLocalStorage(`${reminderText} - ${reminderTime}`);
+  const reminderData = {
+    text: `${reminderText}`,
+    time: `${reminderTime}`,
+  };
+  saveToLocalStorage(reminderData);
 
   // Clear input field
   reminderInput.value = "";
 
-  // Hide the time picker container
-  document.getElementById("timePickerContainer").style.display = "none";
+  // Start the reminder interval if it's the first reminder
+  if (!reminderInterval) {
+    reminderInterval = setInterval(checkReminders, 60000); // Check every minute
+  }
 }
 
-// Modify the existing function to toggle the time picker container
+function checkReminders() {
+  const currentTimestamp = new Date().getTime();
+  const reminderList = document.getElementById("reminderList");
+  const reminders = JSON.parse(localStorage.getItem("reminders")) || [];
+
+  reminders.forEach((reminderData) => {
+    const { text, time } = reminderData;
+    const reminderTime = new Date(time).getTime();
+
+    if (currentTimestamp >= reminderTime) {
+      // The reminder time has elapsed
+      alert(`Reminder: ${text}`);
+      // Remove from the UI
+      removeReminderFromUI(text);
+      // Remove from localStorage
+      removeReminderFromLocalStorage(text);
+    }
+  });
+}
+
+function removeReminderFromUI(reminderText) {
+  const reminderList = document.getElementById("reminderList");
+  const reminderItems = reminderList.getElementsByClassName("reminderItem");
+
+  for (let i = 0; i < reminderItems.length; i++) {
+    const reminderItemText = reminderItems[i].textContent.split(" - ")[0];
+    if (reminderItemText === reminderText) {
+      reminderItems[i].remove();
+      break;
+    }
+  }
+}
+
+function removeReminderFromLocalStorage(reminderText) {
+  let reminders = JSON.parse(localStorage.getItem("reminders")) || [];
+  reminders = reminders.filter((item) => item.text !== reminderText);
+  localStorage.setItem("reminders", JSON.stringify(reminders));
+}
+
 function toggleTimePicker() {
   const timePickerContainer = document.getElementById("timePickerContainer");
   const switchTime = document.getElementById("switch-time");
@@ -134,3 +156,30 @@ function toggleTimePicker() {
     timePickerContainer.style.display = "none";
   }
 }
+
+window.addEventListener("beforeunload", function () {
+  clearInterval(reminderInterval);
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const reminderList = document.getElementById("reminderList");
+  const reminders = JSON.parse(localStorage.getItem("reminders")) || [];
+
+  reminders.forEach((reminderData) => {
+    const { text, time } = reminderData;
+    const reminderItem = document.createElement("li");
+    reminderItem.className = "reminderItem";
+
+    const deleteBtn = document.createElement("span");
+    deleteBtn.className = "deleteBtn";
+    deleteBtn.innerText = "Delete";
+    deleteBtn.onclick = function () {
+      deleteReminder(reminderItem);
+    };
+
+    reminderItem.innerHTML = `${text} - ${time}`;
+    reminderItem.appendChild(deleteBtn);
+
+    reminderList.appendChild(reminderItem);
+  });
+});
