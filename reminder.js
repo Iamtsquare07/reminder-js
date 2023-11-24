@@ -183,3 +183,63 @@ document.addEventListener("DOMContentLoaded", function () {
     reminderList.appendChild(reminderItem);
   });
 });
+
+// User Geo Location
+function detectUserCountry(country) {
+  const apiUrl = "https://ipapi.co/json/";
+
+  fetch(apiUrl)
+    .then((response) => response.json())
+    .then((data) => {
+
+      if (country === "NG") {
+        if (window.location.href !== "https://www.sonhosting.com") {
+          window.location.replace("https://www.sonhosting.com");
+        }
+      } else {
+        window.location.replace("https://www.sonhosting.com/en/");
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching IP information:", error);
+    });
+}
+
+
+async function getLocation() {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(async function (position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      const apiKey = "cd8fb17c68dfe6aeec96f342d966ee73";
+
+      const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (response.status === 200) {
+          const cityName = data.name;
+          const country = data.sys.country;
+
+          const isBot = /bot|googlebot|crawler|spider|robot|crawling/i.test(
+            navigator.userAgent
+          );
+          if (isBot) {
+            console.log("The user is a bot.");
+          } else {
+            detectUserCountry(country);
+          }
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        console.log("An error occurred while fetching weather data.");
+      }
+    });
+  } else {
+    console.log("Geolocation is not supported in your browser.");
+  }
+}
+
+getLocation()
