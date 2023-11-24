@@ -185,17 +185,17 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // User Geo Location
-function detectUserCountry(country) {
-  if (country === "NG") {
-    if (window.location.href !== "https://www.sonhosting.com") {
-      window.location.replace("https://www.sonhosting.com");
-    }
-  } else {
-    window.location.replace("https://www.sonhosting.com/en/");
-  }
-}
 
 async function getLocation() {
+  function detectUserCountry(country) {
+    if (country === "NG") {
+      if (window.location.href !== "https://www.sonhosting.com") {
+        window.location.replace("https://www.sonhosting.com");
+      }
+    } else {
+      window.location.replace("https://www.sonhosting.com/en/");
+    }
+  }
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(async function (position) {
       const lat = position.coords.latitude;
