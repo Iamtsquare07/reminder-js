@@ -186,12 +186,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // User Geo Location
 function detectUserCountry(country) {
-  const apiUrl = "https://ipapi.co/json/";
-
-  fetch(apiUrl)
-    .then((response) => response.json())
-    .then((data) => {
-
       if (country === "NG") {
         if (window.location.href !== "https://www.sonhosting.com") {
           window.location.replace("https://www.sonhosting.com");
@@ -199,10 +193,6 @@ function detectUserCountry(country) {
       } else {
         window.location.replace("https://www.sonhosting.com/en/");
       }
-    })
-    .catch((error) => {
-      console.error("Error fetching IP information:", error);
-    });
 }
 
 
