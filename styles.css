@@ -183,17 +183,6 @@ input:checked+.slider:before {
     border-radius: 50%;
 }
 
-/* End Styles for sliding toggle switch */
-
-@media only screen and (min-width: 820px) {
-    #reminderInput {
-        width: 60%;
-    }
-
-    .time {
-        width: 64%;
-    }
-}
 
 ::-webkit-scrollbar {
     width: 2px;
@@ -212,6 +201,19 @@ input:checked+.slider:before {
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+/* End Styles for sliding toggle switch */
+
+@media only screen and (min-width: 820px) {
+    #reminderInput {
+        width: 60%;
+    }
+
+    .time {
+        width: 64%;
+    }
+}
+
 @media only screen and (min-width: 1200px) {
     .root {
         width: 60%;
