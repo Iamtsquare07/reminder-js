@@ -26,7 +26,11 @@ function addReminder() {
   reminderList.appendChild(reminderItem);
 
   // Save to localStorage
-  saveToLocalStorage(reminderText);
+  const reminderData = {
+    text: reminderText,
+    time: "", // Placeholder for time when not specified initially
+  };
+  saveToLocalStorage(reminderData);
 
   // Clear input field
   reminderInput.value = "";
@@ -34,11 +38,19 @@ function addReminder() {
 
 function deleteReminder(reminderItem) {
   if (confirm("Are you sure you want to delete this reminder?")) {
+    // Extract the text and time from the reminder item
+    const [reminderText, reminderTime] = reminderItem.textContent.split(" - ");
+
     // Remove from the UI
     reminderItem.remove();
 
     // Remove from localStorage
-    removeFromLocalStorage(reminderItem.firstChild.nodeValue);
+    removeFromLocalStorage(reminderText);
+
+    // If there is a reminder time, remove the reminder from localStorage based on the new structure
+    if (reminderTime) {
+      removeFromLocalStorage(reminderText);
+    }
   }
 }
 
@@ -93,8 +105,8 @@ function setReminder(defaultTime) {
 
   // Save to localStorage
   const reminderData = {
-    text: `${reminderText}`,
-    time: `${reminderTime}`,
+    text: reminderText,
+    time: reminderTime,
   };
   saveToLocalStorage(reminderData);
 
@@ -177,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
       deleteReminder(reminderItem);
     };
 
-    reminderItem.innerHTML = `${text} - ${time}`;
+    reminderItem.innerHTML = `${text} ${time ? "-": ""} ${time} `;
     reminderItem.appendChild(deleteBtn);
 
     reminderList.appendChild(reminderItem);
