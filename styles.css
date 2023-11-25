@@ -195,10 +195,28 @@ input:checked+.slider:before {
     }
 }
 
+::-webkit-scrollbar {
+    width: 2px;
+    /* Width of the scrollbar */
+}
+
+/* Style the scrollbar thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+    background: #3551f185;
+    /* Color of the scrollbar thumb */
+    border-radius: 6px;
+    /* Rounded corners of the thumb */
+}
+
+/* Style the scrollbar track when hovering over it */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
 @media only screen and (min-width: 1200px) {
     .root {
         width: 60%;
         height: 400px;
+        overflow-y: auto;
     }
 
     h1 {
