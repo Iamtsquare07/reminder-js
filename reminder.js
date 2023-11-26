@@ -36,6 +36,7 @@ function addReminder() {
   reminderInput.value = "";
 }
 
+
 function deleteReminder(reminderItem) {
   if (confirm("Are you sure you want to delete this reminder?")) {
     // Extract the text and time from the reminder item
