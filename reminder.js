@@ -46,10 +46,7 @@ function deleteReminder(reminderItem) {
     // Extract the text and time from the reminder item
     const [reminderText, reminderTime] = reminderItem.textContent.split(" - ");
 
-    // Remove from the UI
     reminderItem.remove();
-
-    // Remove from localStorage
     removeFromLocalStorage(reminderText);
 
     // If there is a reminder time, remove the reminder from localStorage based on the new structure
@@ -133,9 +130,7 @@ function checkReminders() {
     const reminderTime = new Date(time).getTime();
 
     if (currentTimestamp >= reminderTime) {
-      // The reminder time has elapsed
       alert(`Reminder: ${text}`);
-      // Remove from the UI
       removeReminderFromUI(text);
       // Remove from localStorage
       removeReminderFromLocalStorage(text);
