@@ -1,7 +1,7 @@
 let reminderInterval;
+const reminderInput = document.getElementById("reminderInput");
 
 function addReminder() {
-  const reminderInput = document.getElementById("reminderInput");
   const reminderList = document.getElementById("reminderList");
 
   if (reminderInput.value.trim() === "") {
@@ -35,6 +35,10 @@ function addReminder() {
   // Clear input field
   reminderInput.value = "";
 }
+
+reminderInput.addEventListener("keypress", (e) => {
+  if(e.key === "Enter") addReminder()
+})
 
 
 function deleteReminder(reminderItem) {
@@ -81,8 +85,7 @@ function setReminder(defaultTime) {
     reminderTime = defaultTime;
   }
 
-  const reminderInput = document.getElementById("reminderInput");
-
+  
   if (reminderInput.value.trim() === "") {
     alert("Please enter a reminder.");
     return;
