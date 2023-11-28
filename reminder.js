@@ -92,8 +92,9 @@ function saveRemindersToLocalStorage() {
 
     for (const listItem of listItems) {
       const reminderText = listItem.querySelector(".reminderText").textContent;
-      const reminderState =
-        listItem.querySelector(".reminderStateValue").textContent;
+      const reminderState = listItem.querySelector(
+        ".reminderStateValue"
+      ).textContent;
 
       remindersForDate.push({ text: reminderText, state: reminderState });
     }
@@ -126,17 +127,17 @@ function getOrCreateReminderList(dateString) {
   return reminderList;
 }
 
-  // Function to format the date
-  function formatDate(dateString) {
-    const options = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    const date = new Date(dateString);
-    return date.toLocaleDateString(undefined, options);
-  }
+// Function to format the date
+function formatDate(dateString) {
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  const date = new Date(dateString);
+  return date.toLocaleDateString(undefined, options);
+}
 
 function saveToLocalStorage(reminderData) {
   let reminders = JSON.parse(localStorage.getItem("reminders")) || [];
