@@ -104,7 +104,6 @@ function saveRemindersToLocalStorage() {
   localStorage.setItem("reminders", JSON.stringify(reminders));
 }
 
-// Get or create a reminder list based on the date
 function getOrCreateReminderList(dateString) {
   const formattedDate = formatDate(dateString);
   const listId = `list-${formattedDate}`;
@@ -121,8 +120,6 @@ function getOrCreateReminderList(dateString) {
     const listHeading = document.createElement("h2");
     listHeading.textContent = formattedDate;
     reminderList.appendChild(listHeading);
-
-    // Append the list to the lists container
     listsContainer.appendChild(reminderList);
   }
 
