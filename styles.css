@@ -89,7 +89,7 @@ h1 {
 
 .deleteBtn {
     cursor: pointer;
-    color: red;
+    color: #8d1c1c;
     font-weight: bold;
 }
 
@@ -183,26 +183,20 @@ input:checked+.slider:before {
     border-radius: 50%;
 }
 
+/* End Styles for sliding toggle switch */
 
 ::-webkit-scrollbar {
     width: 2px;
-    /* Width of the scrollbar */
 }
 
-/* Style the scrollbar thumb (the draggable part) */
 ::-webkit-scrollbar-thumb {
     background: #3551f185;
-    /* Color of the scrollbar thumb */
     border-radius: 6px;
-    /* Rounded corners of the thumb */
 }
 
-/* Style the scrollbar track when hovering over it */
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
-
-/* End Styles for sliding toggle switch */
 
 @media only screen and (min-width: 820px) {
     #reminderInput {
