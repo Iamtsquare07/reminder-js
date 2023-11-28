@@ -25,7 +25,6 @@ function addReminder() {
 
   reminderList.appendChild(reminderItem);
 
-  // Save to localStorage
   const reminderData = {
     text: reminderText,
   };
@@ -65,7 +64,6 @@ function createReminderListItem(reminderText, reminderTime) {
 
   listItem.querySelector(".delete-reminder").addEventListener("click", () => {
     listItem.remove();
-    // Save reminders to localStorage after deleting a reminder
     saveRemindersToLocalStorage();
   });
 
@@ -115,7 +113,6 @@ function getOrCreateReminderList(dateString) {
   let reminderList = document.getElementById(listId);
 
   if (!reminderList) {
-    // Create a new list if it doesn't exist
     reminderList = document.createElement("ul");
     reminderList.id = listId;
     reminderList.className = "reminderList";
