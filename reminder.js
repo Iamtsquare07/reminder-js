@@ -1,6 +1,6 @@
 let reminderInterval;
 const reminderInput = document.getElementById("reminderInput");
-const listsContainer = document.getElementById("reminderListContainer");
+const listsContainer = document.getElementById("reminderList");
 
 function addReminder() {
   if (reminderInput.value.trim() === "") {
@@ -107,18 +107,28 @@ function formatDate(date) {
   return date.toLocaleDateString(undefined, options);
 }
 
+function formatDateForLocalStorage(dateString) {
+  const date = new Date(dateString);
+  return date.toISOString(); // Use ISO format
+}
+
 window.addEventListener("beforeunload", function () {
   clearInterval(reminderInterval);
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  const reminders = JSON.parse(localStorage.getItem("reminders")) || [];
-  const reminderListContainer = document.getElementById("reminderListContainer");
+  const reminders = JSON.parse(localStorage.getItem("reminders")) || {};
+  const reminderListContainer = document.getElementById("reminderList");
 
-  reminders.forEach((reminderData) => {
-    const { text } = reminderData;
-    const reminderItem = createReminderListItem(text);
-    const reminderList = getOrCreateReminderList(new Date());
-    reminderList.appendChild(reminderItem);
+  // Iterate over the keys (date strings) of the reminders object
+  Object.keys(reminders).forEach((dateString) => {
+    const formattedDate = new Date(dateString);
+    const reminderList = getOrCreateReminderList(formattedDate);
+
+    reminders[dateString].forEach((reminderData) => {
+      const { text } = reminderData;
+      const reminderItem = createReminderListItem(text);
+      reminderList.appendChild(reminderItem);
+    });
   });
 });
