@@ -1,6 +1,7 @@
 let reminderInterval;
 const reminderInput = document.getElementById("reminderInput");
 const listsContainer = document.getElementById("reminderList");
+let selectedTime = null;
 
 function addReminder() {
   if (reminderInput.value.trim() === "") {
@@ -17,6 +18,20 @@ function addReminder() {
 
   // Clear input field
   reminderInput.value = "";
+
+  // Set reminder time if available
+  if (selectedTime) {
+    const reminderDateTime = new Date();
+    reminderDateTime.setSeconds(0);
+    const timeParts = selectedTime.split(":");
+    reminderDateTime.setHours(parseInt(timeParts[0], 10));
+    reminderDateTime.setMinutes(parseInt(timeParts[1], 10));
+
+    console.log("Reminder will be triggered at:", reminderDateTime);
+    // Now you can use `reminderDateTime` to set up your reminder
+  }
+
+  selectedTime = null; // Reset selected time
 }
 
 reminderInput.addEventListener("keypress", (e) => {
@@ -96,7 +111,6 @@ function getOrCreateReminderList(date) {
   return reminderList;
 }
 
-// Function to format the date
 function formatDate(date) {
   const options = {
     weekday: "long",
@@ -112,23 +126,18 @@ function formatDateForLocalStorage(dateString) {
   return date.toISOString(); // Use ISO format
 }
 
-window.addEventListener("beforeunload", function () {
-  clearInterval(reminderInterval);
-});
+function toggleTimePicker() {
+  const timePickerContainer = document.getElementById("timePickerContainer");
+  const switchTime = document.getElementById("switch-time");
 
-document.addEventListener("DOMContentLoaded", function () {
-  const reminders = JSON.parse(localStorage.getItem("reminders")) || {};
-  const reminderListContainer = document.getElementById("reminderList");
+  if (switchTime.checked) {
+    timePickerContainer.style.display = "block";
+  } else {
+    timePickerContainer.style.display = "none";
+    selectedTime = null; // Reset the selected time when the switch is turned off
+  }
+}
 
-  // Iterate over the keys (date strings) of the reminders object
-  Object.keys(reminders).forEach((dateString) => {
-    const formattedDate = new Date(dateString);
-    const reminderList = getOrCreateReminderList(formattedDate);
-
-    reminders[dateString].forEach((reminderData) => {
-      const { text } = reminderData;
-      const reminderItem = createReminderListItem(text);
-      reminderList.appendChild(reminderItem);
-    });
-  });
-});
+function setReminder(time) {
+  selectedTime = time;
+}
