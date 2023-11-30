@@ -1,6 +1,6 @@
 let reminderInterval;
 const reminderInput = document.getElementById("reminderInput");
-const listsContainer = document.getElementById("reminderList");
+const listsContainer = document.getElementById("reminderListContainer");
 
 function addReminder() {
   if (reminderInput.value.trim() === "") {
@@ -113,7 +113,7 @@ window.addEventListener("beforeunload", function () {
 
 document.addEventListener("DOMContentLoaded", function () {
   const reminders = JSON.parse(localStorage.getItem("reminders")) || [];
-  const reminderListContainer = document.getElementById("reminderList");
+  const reminderListContainer = document.getElementById("reminderListContainer");
 
   reminders.forEach((reminderData) => {
     const { text } = reminderData;
