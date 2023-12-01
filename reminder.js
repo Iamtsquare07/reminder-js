@@ -1,7 +1,7 @@
 let reminderInterval;
 const reminderInput = document.getElementById("reminderInput");
 const listsContainer = document.getElementById("reminderList");
-let selectedTime = null;
+let reminderTime;
 
 function addReminder() {
   if (reminderInput.value.trim() === "") {
@@ -10,7 +10,10 @@ function addReminder() {
   }
 
   const reminderText = reminderInput.value;
-  const reminderItem = createReminderListItem(reminderText);
+  const reminderTimeField = document.getElementById("timePicker");
+  reminderTime = reminderTimeField.value ? reminderTimeField.value : null;
+  console.log(reminderTime);
+  const reminderItem = createReminderListItem(reminderText, reminderTime);
   const reminderList = getOrCreateReminderList(new Date());
   reminderList.appendChild(reminderItem);
 
@@ -18,35 +21,36 @@ function addReminder() {
 
   // Clear input field
   reminderInput.value = "";
-
-  // Set reminder time if available
-  if (selectedTime) {
-    const reminderDateTime = new Date();
-    reminderDateTime.setSeconds(0);
-    const timeParts = selectedTime.split(":");
-    reminderDateTime.setHours(parseInt(timeParts[0], 10));
-    reminderDateTime.setMinutes(parseInt(timeParts[1], 10));
-
-    console.log("Reminder will be triggered at:", reminderDateTime);
-    // Now you can use `reminderDateTime` to set up your reminder
-  }
-
-  selectedTime = null; // Reset selected time
 }
 
 reminderInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") addReminder();
 });
 
-function createReminderListItem(reminderText) {
+function toggleTimePicker() {
+  const timePickerContainer = document.getElementById("timePickerContainer");
+  const switchTime = document.getElementById("switch-time");
+
+  if (switchTime.checked) {
+    timePickerContainer.style.display = "block";
+  } else {
+    timePickerContainer.style.display = "none";
+    selectedTime = null; // Reset the selected time when the switch is turned off
+  }
+}
+
+function createReminderListItem(reminderText, reminderTime) {
   // Create a new reminder list item
   const listItem = document.createElement("li");
   listItem.className = "reminderItem";
 
   listItem.innerHTML = `
-    <span class="reminderText">${reminderText}</span>
+    <div class="reminderData">
+    <span class="reminderText">${reminderText}</span><span class="reminderTime">${reminderTime ? reminderTime : ""}</span></div>
+    <div class="reminderButtons">
     <button class="editReminder"><i class="fas fa-pen-square"></i> Edit</button>
     <button class="delete-reminder"><i class="fas fa-trash-alt"></i> Delete</button>
+    </div>
   `;
 
   listItem.querySelector(".delete-reminder").addEventListener("click", () => {
@@ -80,7 +84,7 @@ function saveRemindersToLocalStorage() {
     for (const listItem of listItems) {
       const reminderText = listItem.querySelector(".reminderText").textContent;
 
-      remindersForDate.push({ text: reminderText });
+      remindersForDate.push({ text: reminderText, time:  reminderTime});
     }
 
     reminders[dateString] = remindersForDate;
@@ -111,6 +115,7 @@ function getOrCreateReminderList(date) {
   return reminderList;
 }
 
+// Function to format the date
 function formatDate(date) {
   const options = {
     weekday: "long",
@@ -126,18 +131,23 @@ function formatDateForLocalStorage(dateString) {
   return date.toISOString(); // Use ISO format
 }
 
-function toggleTimePicker() {
-  const timePickerContainer = document.getElementById("timePickerContainer");
-  const switchTime = document.getElementById("switch-time");
+window.addEventListener("beforeunload", function () {
+  clearInterval(reminderInterval);
+});
 
-  if (switchTime.checked) {
-    timePickerContainer.style.display = "block";
-  } else {
-    timePickerContainer.style.display = "none";
-    selectedTime = null; // Reset the selected time when the switch is turned off
-  }
-}
+document.addEventListener("DOMContentLoaded", function () {
+  const reminders = JSON.parse(localStorage.getItem("reminders")) || {};
+  const reminderListContainer = document.getElementById("reminderList");
 
-function setReminder(time) {
-  selectedTime = time;
-}
+  // Iterate over the keys (date strings) of the reminders object
+  Object.keys(reminders).forEach((dateString) => {
+    const formattedDate = new Date(dateString);
+    const reminderList = getOrCreateReminderList(formattedDate);
+
+    reminders[dateString].forEach((reminderData) => {
+      const { text, time } = reminderData;
+      const reminderItem = createReminderListItem(text, time);
+      reminderList.appendChild(reminderItem);
+    });
+  });
+});
