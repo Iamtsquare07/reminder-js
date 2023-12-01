@@ -1,7 +1,6 @@
 let reminderInterval;
 const reminderInput = document.getElementById("reminderInput");
 const listsContainer = document.getElementById("reminderList");
-let reminderTime;
 
 function addReminder() {
   if (reminderInput.value.trim() === "") {
@@ -11,7 +10,7 @@ function addReminder() {
 
   const reminderText = reminderInput.value;
   const reminderTimeField = document.getElementById("timePicker");
-  reminderTime = reminderTimeField.value ? reminderTimeField.value : null;
+  const reminderTime = reminderTimeField.value ? reminderTimeField.value : null;
   console.log(reminderTime);
   const reminderItem = createReminderListItem(reminderText, reminderTime);
   const reminderList = getOrCreateReminderList(new Date());
@@ -46,7 +45,9 @@ function createReminderListItem(reminderText, reminderTime) {
 
   listItem.innerHTML = `
     <div class="reminderData">
-    <span class="reminderText">${reminderText}</span><span class="reminderTime">${reminderTime ? reminderTime : ""}</span></div>
+    <span class="reminderText">${reminderText}</span><span class="reminderTime">${
+    reminderTime ? reminderTime : ""
+  }</span></div>
     <div class="reminderButtons">
     <button class="editReminder"><i class="fas fa-pen-square"></i> Edit</button>
     <button class="delete-reminder"><i class="fas fa-trash-alt"></i> Delete</button>
@@ -83,8 +84,8 @@ function saveRemindersToLocalStorage() {
 
     for (const listItem of listItems) {
       const reminderText = listItem.querySelector(".reminderText").textContent;
-
-      remindersForDate.push({ text: reminderText, time:  reminderTime});
+      const reminderTime = listItem.querySelector(".reminderTime").textContent;
+      remindersForDate.push({ text: reminderText, time: reminderTime });
     }
 
     reminders[dateString] = remindersForDate;
