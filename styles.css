@@ -85,6 +85,16 @@ h1 {
     border: 1px solid #ccc;
     padding: 8px;
     margin-bottom: 8px;
+    background-color: #1a2349;
+    border-radius: 10px;
+    border: 1px solid #1a2349
+}
+
+.reminderData {
+    display: flex;
+    justify-content: space-between;
+    width: 65%;
+    text-align: left;
 }
 
 .deleteBtn {
@@ -118,11 +128,6 @@ button {
     width: 80%;
 }
 
-.reminderItem {
-    background-color: #1a2349;
-    border-radius: 10px;
-    border: 1px solid #1a2349
-}
 
 /* Styles for sliding toggle switch */
 .switch {
@@ -211,7 +216,7 @@ input:checked+.slider:before {
 @media only screen and (min-width: 1200px) {
     .root {
         width: 60%;
-        height: 400px;
+        height: 450px;
         overflow-y: auto;
     }
 
