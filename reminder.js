@@ -29,13 +29,18 @@ reminderInput.addEventListener("keypress", (e) => {
 function toggleTimePicker() {
   const timePickerContainer = document.getElementById("timePickerContainer");
   const switchTime = document.getElementById("switch-time");
-
+  let selectedTime = document.getElementById("timePicker");
   if (switchTime.checked) {
     timePickerContainer.style.display = "block";
   } else {
     timePickerContainer.style.display = "none";
-    selectedTime = null; // Reset the selected time when the switch is turned off
+    selectedTime.value = null;
   }
+}
+
+function setReminder(time) {
+  const trimmedTime = new Date();
+  console.log(trimmedTime.getHours());
 }
 
 function createReminderListItem(reminderText, reminderTime) {
@@ -138,7 +143,6 @@ window.addEventListener("beforeunload", function () {
 
 document.addEventListener("DOMContentLoaded", function () {
   const reminders = JSON.parse(localStorage.getItem("reminders")) || {};
-  const reminderListContainer = document.getElementById("reminderList");
 
   // Iterate over the keys (date strings) of the reminders object
   Object.keys(reminders).forEach((dateString) => {
