@@ -2,7 +2,7 @@ let reminderInterval;
 const reminderInput = document.getElementById("reminderInput");
 const listsContainer = document.getElementById("reminderList");
 
-function addReminder() {
+function addReminder(time) {
   if (reminderInput.value.trim() === "") {
     alert("Please enter a reminder.");
     return;
@@ -10,15 +10,10 @@ function addReminder() {
 
   const reminderText = reminderInput.value;
   const reminderTimeField = document.getElementById("timePicker");
-  const reminderTime = reminderTimeField.value ? reminderTimeField.value : null;
-  console.log(reminderTime);
+  const reminderTime = time ? time : reminderTimeField.value ? reminderTimeField.value : null;
   const reminderItem = createReminderListItem(reminderText, reminderTime);
   const reminderList = getOrCreateReminderList(new Date());
   reminderList.appendChild(reminderItem);
-
-  if(reminderTime) {
-    setReminder(reminderTime)
-  }
 
   saveRemindersToLocalStorage();
 
@@ -55,7 +50,7 @@ function setReminder(time) {
     trimmedTime.setHours(trimmedTime.getHours() + hoursFromNow);
   }
 
-  console.log(trimmedTime);
+  addReminder(trimmedTime)
 }
 
 
