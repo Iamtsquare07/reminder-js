@@ -16,6 +16,10 @@ function addReminder() {
   const reminderList = getOrCreateReminderList(new Date());
   reminderList.appendChild(reminderItem);
 
+  if(reminderTime) {
+    setReminder(reminderTime)
+  }
+
   saveRemindersToLocalStorage();
 
   // Clear input field
