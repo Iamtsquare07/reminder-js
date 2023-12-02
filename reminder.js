@@ -40,8 +40,22 @@ function toggleTimePicker() {
 
 function setReminder(time) {
   const trimmedTime = new Date();
-  console.log(trimmedTime.getHours());
+
+  if (time.includes(':')) {
+    // Parse the input time in 'hh:mm' format
+    const [hours, minutes] = time.split(':').map(Number);
+    trimmedTime.setHours(hours, minutes, 0, 0);
+  } else {
+    // Parse the input time in 'h' format (hours from now)
+    const hoursFromNow = parseInt(time);
+    trimmedTime.setHours(trimmedTime.getHours() + hoursFromNow);
+  }
+
+  console.log(trimmedTime);
 }
+
+
+
 
 function createReminderListItem(reminderText, reminderTime) {
   // Create a new reminder list item
