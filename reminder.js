@@ -10,7 +10,7 @@ function addReminder(time) {
 
   const reminderText = reminderInput.value;
   const reminderTimeField = document.getElementById("timePicker");
-  const reminderTime = time ? time : reminderTimeField.value ? reminderTimeField.value : null;
+  const reminderTime = time ? setReminder(time) : reminderTimeField.value ? reminderTimeField.value : null;
   const reminderItem = createReminderListItem(reminderText, reminderTime);
   const reminderList = getOrCreateReminderList(new Date());
   reminderList.appendChild(reminderItem);
@@ -50,8 +50,26 @@ function setReminder(time) {
     trimmedTime.setHours(trimmedTime.getHours() + hoursFromNow);
   }
 
-  addReminder(trimmedTime)
+  const formattedTime = formatReminderTime(trimmedTime);
+  return formattedTime;
 }
+
+function formatReminderTime(date) {
+  const now = new Date();
+
+  if (
+    date.getDate() === now.getDate() &&
+    date.getMonth() === now.getMonth() &&
+    date.getFullYear() === now.getFullYear()
+  ) {
+    // If the reminder is for today
+    return `Today, ${date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`;
+  } else {
+    // If the reminder is for a future date
+    return `${date.toLocaleDateString([], { month: 'short', day: 'numeric' })}, ${date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`;
+  }
+}
+
 
 
 
