@@ -5,12 +5,17 @@ const listsContainer = document.getElementById("reminderList");
 function addReminder(time) {
   if (reminderInput.value.trim() === "") {
     alert("Please enter a reminder.");
+    reminderInput.focus();
     return;
   }
 
   const reminderText = reminderInput.value;
   const reminderTimeField = document.getElementById("timePicker");
-  const reminderTime = time ? setReminder(time) : reminderTimeField.value ? reminderTimeField.value : null;
+  const reminderTime = time
+    ? setReminder(time)
+    : reminderTimeField.value
+    ? setReminder(reminderTimeField.value)
+    : null;
   const reminderItem = createReminderListItem(reminderText, reminderTime);
   const reminderList = getOrCreateReminderList(new Date());
   reminderList.appendChild(reminderItem);
@@ -40,9 +45,9 @@ function toggleTimePicker() {
 function setReminder(time) {
   const trimmedTime = new Date();
 
-  if (time.includes(':')) {
+  if (time.includes(":")) {
     // Parse the input time in 'hh:mm' format
-    const [hours, minutes] = time.split(':').map(Number);
+    const [hours, minutes] = time.split(":").map(Number);
     trimmedTime.setHours(hours, minutes, 0, 0);
   } else {
     // Parse the input time in 'h' format (hours from now)
@@ -63,16 +68,21 @@ function formatReminderTime(date) {
     date.getFullYear() === now.getFullYear()
   ) {
     // If the reminder is for today
-    return `Today, ${date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`;
+    return `Today, ${date.toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+    })}`;
   } else {
     // If the reminder is for a future date
-    return `${date.toLocaleDateString([], { month: 'short', day: 'numeric' })}, ${date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`;
+    return `${date.toLocaleDateString([], {
+      month: "short",
+      day: "numeric",
+    })}, ${date.toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+    })}`;
   }
 }
-
-
-
-
 
 function createReminderListItem(reminderText, reminderTime) {
   // Create a new reminder list item
