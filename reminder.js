@@ -19,7 +19,7 @@ function addReminder(time) {
   const reminderItem = createReminderListItem(reminderText, reminderTime);
   const reminderList = getOrCreateReminderList(new Date());
   reminderList.appendChild(reminderItem);
-
+  setReminderTimeout(reminderTime);
   saveRemindersToLocalStorage();
 
   // Clear input field
@@ -29,6 +29,37 @@ function addReminder(time) {
 reminderInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") addReminder();
 });
+
+function setReminderTimeout(time) {
+  // Split the string based on the comma and space
+  const returnedTime = time.split(", ");
+
+  // Extract the time part
+  const newTime = returnedTime[1];
+
+  // Split the time part based on the colon
+  const timeComponents = newTime.split(":");
+
+  // Extract hours and minutes
+  const hours = parseInt(timeComponents[0], 10);
+  const minutes = parseInt(timeComponents[1], 10);
+
+  console.log("Hours:", hours);
+  console.log("Minutes:", minutes);
+
+  const targetTime = new Date();
+  targetTime.setHours(hours, minutes, 0, 0);
+  const currentTime = new Date();
+  const timeDiff = targetTime - currentTime;
+  console.log("TimeDiff:", timeDiff);
+
+  const reminderTimeout = timeDiff;
+  console.log(reminderTimeout);
+
+  reminderInterval = setInterval(() => {
+    playAlarm();
+  }, reminderTimeout);
+}
 
 function toggleTimePicker() {
   const timePickerContainer = document.getElementById("timePickerContainer");
@@ -179,6 +210,11 @@ function formatDate(date) {
     day: "numeric",
   };
   return date.toLocaleDateString(undefined, options);
+}
+
+function playAlarm() {
+  const alarmSound = document.getElementById("reminderSound");
+  alarmSound.play();
 }
 
 function formatDateForLocalStorage(dateString) {
