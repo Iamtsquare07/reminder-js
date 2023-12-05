@@ -88,28 +88,36 @@ function createReminderListItem(reminderText, reminderTime) {
   // Create a new reminder list item
   const listItem = document.createElement("li");
   listItem.className = "reminderItem";
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.className = "taskCheckbox";
 
   listItem.innerHTML = `
     <div class="reminderData">
-    <span class="reminderText">${reminderText}</span><span class="reminderTime">${
+    <span class="reminderText">${reminderText}</span></div><div class="reminderButtons"><span class="reminderTime">${
     reminderTime ? reminderTime : ""
-  }</span></div>
-    <div class="reminderButtons">
-    <button class="editReminder"><i class="fas fa-pen-square"></i> Edit</button>
-    <button class="delete-reminder"><i class="fas fa-trash-alt"></i> Delete</button>
+  }</span>
+    
+  <button class="editReminder"><i class="fas fa-pen-square"></i> Edit</button>
     </div>
   `;
 
-  listItem.querySelector(".delete-reminder").addEventListener("click", () => {
-    listItem.remove();
-    saveRemindersToLocalStorage();
-  });
+  listItem.insertBefore(checkbox, listItem.firstChild);
 
   listItem.querySelector(".editReminder").addEventListener("click", () => {
     const reminderSpan = listItem.querySelector(".reminderText");
     const editedText = prompt("Edit reminder:", reminderSpan.textContent);
     if (editedText !== null) {
       reminderSpan.textContent = editedText;
+      saveRemindersToLocalStorage();
+    }
+  });
+
+  checkbox.addEventListener("change", () => {
+    if (checkbox.checked) {
+      listItem.querySelector(".reminderText").style.textDecoration =
+        "line-through";
+      listItem.remove();
       saveRemindersToLocalStorage();
     }
   });
