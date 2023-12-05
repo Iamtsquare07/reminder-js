@@ -77,7 +77,16 @@ h1 {
 #reminderList {
     list-style-type: none;
     padding: 0;
+    width: 90%;
+    font-size: 14px;
 }
+
+#reminderList ul {
+    margin: 0;
+    padding: 0;
+}
+
+
 
 .reminderItem {
     display: flex;
@@ -88,20 +97,22 @@ h1 {
     margin-bottom: 8px;
     background-color: #1a2349;
     border-radius: 10px;
-    border: 1px solid #1a2349
+    border: 1px solid #1a2349;
+    width: 100%;
 }
 
 .reminderData {
     display: flex;
     justify-content: space-between;
-    width: 65%;
+    width: 60%;
     text-align: left;
 }
 
-.deleteBtn {
-    cursor: pointer;
-    color: #8d1c1c;
-    font-weight: bold;
+.reminderButtons {
+    display: flex;
+    width: 40%;
+    justify-content: space-between;
+    align-items:center;
 }
 
 button {
@@ -125,9 +136,7 @@ button {
     margin-top: 10px;
 }
 
-#reminderList {
-    width: 80%;
-}
+
 
 
 /* Styles for sliding toggle switch */
@@ -229,12 +238,14 @@ input:checked+.slider:before {
         width: 50%;
     }
 
+
     .time {
         width: 54.5%;
     }
 
     #reminderList {
         width: 60%;
+        font-size: 18px;
     }
 
 }
