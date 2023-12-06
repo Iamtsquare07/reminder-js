@@ -129,20 +129,40 @@ function createReminderListItem(reminderText, reminderTime) {
     reminderTime ? reminderTime : ""
   }</span>
     
-  <button class="editReminder"><i class="fas fa-pen-square"></i> Edit</button>
+  ${isMobileDevice ? "" : `<button class="editReminder"><i class="fas fa-pen-square"></i> Edit</button>`}
     </div>
   `;
 
   listItem.insertBefore(checkbox, listItem.firstChild);
 
-  listItem.querySelector(".editReminder").addEventListener("click", () => {
-    const reminderSpan = listItem.querySelector(".reminderText");
-    const editedText = prompt("Edit reminder:", reminderSpan.textContent);
-    if (editedText !== null) {
-      reminderSpan.textContent = editedText;
-      saveRemindersToLocalStorage();
-    }
-  });
+  if(!isMobileDevice) {
+    listItem.querySelector(".editReminder").addEventListener("click", () => {
+      const reminderSpan = listItem.querySelector(".reminderText");
+      const editedText = prompt("Edit reminder:", reminderSpan.textContent);
+      if (editedText !== null) {
+        reminderSpan.textContent = editedText;
+        saveRemindersToLocalStorage();
+      }
+    });
+  }
+
+  if (isMobileDevice) {
+    listItem.querySelector(".reminderText").addEventListener("click", () => {
+      const reminderSpan = listItem.querySelector(".reminderText");
+      const editedText = prompt("Edit reminder:", reminderSpan.textContent);
+      if (editedText !== null) {
+        reminderSpan.textContent = editedText;
+        saveRemindersToLocalStorage();
+      }
+    });
+  }
+
+  function isMobileDevice() {
+    return window.innerWidth < 768;
+  }
+  
+  console.log(isMobileDevice)
+  console.log(!isMobileDevice)
 
   checkbox.addEventListener("change", () => {
     if (checkbox.checked) {
