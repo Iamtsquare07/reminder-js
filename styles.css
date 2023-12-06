@@ -44,6 +44,18 @@ h1 {
     margin-bottom: 10px;
 }
 
+input[type="time"] {
+    background-color: #31a0fc;
+    border-radius: 3px;
+    border: 1px solid #31a0fc;
+    padding: 2.5px;
+    margin: 3px;
+}
+
+#timePickerLabel {
+    font-weight: 600;
+}
+
 #reminderInput {
     width: 69%;
     padding: 8px;
@@ -113,6 +125,17 @@ h1 {
     width: 40%;
     justify-content: space-between;
     align-items: center;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.buttons button {
+    margin: 5px;
 }
 
 button {
@@ -217,6 +240,10 @@ input:checked+.slider:before {
 
     .time {
         width: 64%;
+    }
+
+    .buttons {
+        flex-direction: row;
     }
 }
 
