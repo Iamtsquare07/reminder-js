@@ -136,9 +136,6 @@ button {
     margin-top: 10px;
 }
 
-
-
-
 /* Styles for sliding toggle switch */
 .switch {
     position: relative;
@@ -247,5 +244,4 @@ input:checked+.slider:before {
         width: 60%;
         font-size: 18px;
     }
-
 }
