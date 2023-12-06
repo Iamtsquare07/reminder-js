@@ -161,8 +161,7 @@ function createReminderListItem(reminderText, reminderTime) {
     return window.innerWidth < 768;
   }
   
-  console.log(isMobileDevice)
-  console.log(!isMobileDevice)
+
 
   checkbox.addEventListener("change", () => {
     if (checkbox.checked) {
