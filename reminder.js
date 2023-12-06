@@ -129,13 +129,17 @@ function createReminderListItem(reminderText, reminderTime) {
     reminderTime ? reminderTime : ""
   }</span>
     
-  ${isMobileDevice() ? "" : `<button class="editReminder"><i class="fas fa-pen-square"></i> Edit</button>`}
+  ${
+    isMobileDevice()
+      ? ""
+      : `<button class="editReminder"><i class="fas fa-pen-square"></i> Edit</button>`
+  }
     </div>
   `;
 
   listItem.insertBefore(checkbox, listItem.firstChild);
 
-  if(!isMobileDevice()) {
+  if (!isMobileDevice()) {
     listItem.querySelector(".editReminder").addEventListener("click", () => {
       const reminderSpan = listItem.querySelector(".reminderText");
       const editedText = prompt("Edit reminder:", reminderSpan.textContent);
@@ -160,7 +164,6 @@ function createReminderListItem(reminderText, reminderTime) {
   function isMobileDevice() {
     return window.innerWidth < 768;
   }
-  
 
   checkbox.addEventListener("change", () => {
     if (checkbox.checked) {
