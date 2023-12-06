@@ -30,12 +30,14 @@
     </div>
     <div class="set-time">
       <div id="timePickerContainer">
-        <label for="timePicker">Pick a time:</label>
+        <label id="timePickerLabel" for="timePicker">Pick a Time:</label><br />
         <input type="time" id="timePicker">
-        <button onclick="addReminder('1h')">1 hour from now</button>
-        <button onclick="addReminder('12:00')">Today at 12 PM</button>
-        <button onclick="addReminder('18:00')">Today at 6 PM</button>
-        <button onclick="addReminder('21:00')">Today at 9 PM</button>
+        <div class="buttons">
+          <button onclick="addReminder('1h')">1 hour from now</button>
+          <button onclick="addReminder('12:00')">Today at 12 PM</button>
+          <button onclick="addReminder('18:00')">Today at 6 PM</button>
+          <button onclick="addReminder('21:00')">Today at 9 PM</button>
+        </div>
 
       </div>
     </div>
