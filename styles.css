@@ -233,6 +233,24 @@ input:checked+.slider:before {
     background: #555;
 }
 
+#notifications {
+    display: none;
+    background-color: #000014;
+    box-shadow: 1px 1px 5px 1px #1b37b4;
+    min-width: 96%;
+    min-height: 50px;
+    position: fixed;
+    top: 6%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 20px;
+}
+
+#notifications button {
+    margin: 5px;
+}
+
 @media only screen and (min-width: 820px) {
     #reminderInput {
         width: 60%;
@@ -244,6 +262,12 @@ input:checked+.slider:before {
 
     .buttons {
         flex-direction: row;
+    }
+
+    #notifications {
+        min-width: 50%;
+        min-height: 50px;
+        top: 7%;
     }
 }
 
