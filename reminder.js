@@ -1,4 +1,5 @@
 let reminderInterval;
+let timerInitiated = false;
 const reminderInput = document.getElementById("reminderInput");
 const listsContainer = document.getElementById("reminderList");
 
@@ -19,7 +20,7 @@ function addReminder(time) {
   const reminderItem = createReminderListItem(reminderText, reminderTime);
   const reminderList = getOrCreateReminderList(new Date());
   reminderList.appendChild(reminderItem);
-  setReminderTimeout(reminderTime);
+  setReminderTimeout(reminderTime, reminderText);
   saveRemindersToLocalStorage();
 
   // Clear input field
@@ -30,8 +31,10 @@ reminderInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") addReminder();
 });
 
-function setReminderTimeout(time) {
-  // Split the string based on the comma and space
+function setReminderTimeout(time, reminderContent) {
+  if(timerInitiated) {
+    console.log("Timer enabled")
+    // Split the string based on the comma and space
   const returnedTime = time.split(", ");
 
   // Extract the time part
@@ -44,21 +47,21 @@ function setReminderTimeout(time) {
   const hours = parseInt(timeComponents[0], 10);
   const minutes = parseInt(timeComponents[1], 10);
 
-  console.log("Hours:", hours);
-  console.log("Minutes:", minutes);
 
   const targetTime = new Date();
   targetTime.setHours(hours, minutes, 0, 0);
   const currentTime = new Date();
   const timeDiff = targetTime - currentTime;
-  console.log("TimeDiff:", timeDiff);
+  
 
   const reminderTimeout = timeDiff;
-  console.log(reminderTimeout);
 
   reminderInterval = setInterval(() => {
-    playAlarm();
+    playAlarm(reminderContent);
   }, reminderTimeout);
+  }else {
+    console.log("Timer not enabled")
+  }
 }
 
 function toggleTimePicker() {
@@ -67,9 +70,11 @@ function toggleTimePicker() {
   let selectedTime = document.getElementById("timePicker");
   if (switchTime.checked) {
     timePickerContainer.style.display = "block";
+    timerInitiated = true;
   } else {
     timePickerContainer.style.display = "none";
     selectedTime.value = null;
+    timerInitiated = false;
   }
 }
 
@@ -233,9 +238,21 @@ function formatDate(date) {
   return date.toLocaleDateString(undefined, options);
 }
 
-function playAlarm() {
+function playAlarm(text) {
   const alarmSound = document.getElementById("reminderSound");
   alarmSound.play();
+  const notification = document.getElementById("notifications");
+
+  document.getElementById('reminderContent').textContent = text;
+  notification.style.display = "block";
+}
+
+function stopAlarm() {
+  console.log("Triggering")
+  const alarmSound = document.getElementById("reminderSound");
+  const notification = document.getElementById("notifications");
+  alarmSound.pause();
+  notification.style.display = "none";
 }
 
 function formatDateForLocalStorage(dateString) {
