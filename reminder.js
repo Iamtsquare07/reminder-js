@@ -16,6 +16,10 @@ function addReminder(time) {
 
   const reminderText = reminderInput.value;
   const reminderTimeField = document.getElementById("timePicker");
+  if (reminderTimeField.value === null || reminderTimeField.value == "") {
+    alert("Set a time for your reminder.");
+    return;
+  }
   const reminderTime = time
     ? setReminder(time)
     : reminderTimeField.value
