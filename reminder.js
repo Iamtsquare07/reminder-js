@@ -1,7 +1,12 @@
 let reminderInterval;
-let timerInitiated = false;
+let timerInitiated = JSON.parse(localStorage.getItem('timerInitiated')) || false;
+let notCancelled = JSON.parse(localStorage.getItem('notCancelled')) || true;
+localStorage.setItem('timerInitiated', JSON.stringify(timerInitiated));
+localStorage.setItem('notCancelled', JSON.stringify(notCancelled));
 const reminderInput = document.getElementById("reminderInput");
 const listsContainer = document.getElementById("reminderList");
+const alarmSound = document.getElementById("reminderSound");
+
 
 function addReminder(time) {
   if (reminderInput.value.trim() === "") {
@@ -35,6 +40,20 @@ function setReminderTimeout(time, reminderContent) {
   if(timerInitiated) {
     console.log("Timer enabled")
     // Split the string based on the comma and space
+  
+  
+  const timeDiff = computeReminderTimeout(time)
+  const reminderTimeout = timeDiff;
+  
+  setTimeout(() => {
+    playAlarm(reminderContent);
+  }, reminderTimeout);
+  }else {
+    console.log("Timer not enabled")
+  }
+}
+
+function computeReminderTimeout(time) {
   const returnedTime = time.split(", ");
 
   // Extract the time part
@@ -51,17 +70,7 @@ function setReminderTimeout(time, reminderContent) {
   const targetTime = new Date();
   targetTime.setHours(hours, minutes, 0, 0);
   const currentTime = new Date();
-  const timeDiff = targetTime - currentTime;
-  
-
-  const reminderTimeout = timeDiff;
-
-  reminderInterval = setInterval(() => {
-    playAlarm(reminderContent);
-  }, reminderTimeout);
-  }else {
-    console.log("Timer not enabled")
-  }
+  return targetTime - currentTime;
 }
 
 function toggleTimePicker() {
@@ -71,10 +80,12 @@ function toggleTimePicker() {
   if (switchTime.checked) {
     timePickerContainer.style.display = "block";
     timerInitiated = true;
+    localStorage.setItem("timerInitiated", JSON.stringify(timerInitiated))
   } else {
     timePickerContainer.style.display = "none";
     selectedTime.value = null;
     timerInitiated = false;
+    localStorage.setItem("timerInitiated", JSON.stringify(timerInitiated))
   }
 }
 
@@ -176,6 +187,14 @@ function createReminderListItem(reminderText, reminderTime) {
         "line-through";
       listItem.remove();
       saveRemindersToLocalStorage();
+      if(timerInitiated) {
+        if(alarmSound.paused) {
+          notCancelled = false;
+          localStorage.setItem("notCancelled", JSON.stringify(notCancelled))
+        }else {
+          stopAlarm();
+        }
+      };
     }
   });
 
@@ -196,7 +215,12 @@ function saveRemindersToLocalStorage() {
     for (const listItem of listItems) {
       const reminderText = listItem.querySelector(".reminderText").textContent;
       const reminderTime = listItem.querySelector(".reminderTime").textContent;
-      remindersForDate.push({ text: reminderText, time: reminderTime });
+
+      // Store the entire reminder object with text, time, and timeout
+      remindersForDate.push({
+        text: reminderText,
+        time: reminderTime,
+      });
     }
 
     reminders[dateString] = remindersForDate;
@@ -239,17 +263,17 @@ function formatDate(date) {
 }
 
 function playAlarm(text) {
-  const alarmSound = document.getElementById("reminderSound");
-  alarmSound.play();
+  if(notCancelled) {
+    alarmSound.play();
   const notification = document.getElementById("notifications");
 
   document.getElementById('reminderContent').textContent = text;
   notification.style.display = "block";
+  }
 }
 
 function stopAlarm() {
   console.log("Triggering")
-  const alarmSound = document.getElementById("reminderSound");
   const notification = document.getElementById("notifications");
   alarmSound.pause();
   notification.style.display = "none";
@@ -266,7 +290,7 @@ window.addEventListener("beforeunload", function () {
 
 document.addEventListener("DOMContentLoaded", function () {
   const reminders = JSON.parse(localStorage.getItem("reminders")) || {};
-
+  console.log(reminders)
   // Iterate over the keys (date strings) of the reminders object
   Object.keys(reminders).forEach((dateString) => {
     const formattedDate = new Date(dateString);
@@ -276,6 +300,12 @@ document.addEventListener("DOMContentLoaded", function () {
       const { text, time } = reminderData;
       const reminderItem = createReminderListItem(text, time);
       reminderList.appendChild(reminderItem);
+
+      if(time) {
+        setTimeout(() => {
+          playAlarm(text);
+        }, computeReminderTimeout(time));
+      }
     });
   });
 });
