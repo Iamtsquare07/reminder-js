@@ -1,11 +1,11 @@
 let reminderInterval;
-let timerInitiated = JSON.parse(localStorage.getItem('timerInitiated')) || false;
-let notCancelled = localStorage.getItem('notCancelled') || true;
+let timerInitiated =
+  JSON.parse(localStorage.getItem("timerInitiated")) || false;
+let notCancelled = localStorage.getItem("notCancelled") || true;
 localStorage.setItem("notCancelled", notCancelled);
 const reminderInput = document.getElementById("reminderInput");
 const listsContainer = document.getElementById("reminderList");
 const alarmSound = document.getElementById("reminderSound");
-
 
 function addReminder(time) {
   if (reminderInput.value.trim() === "") {
@@ -38,19 +38,18 @@ reminderInput.addEventListener("keypress", (e) => {
 });
 
 function setReminderTimeout(time, reminderContent) {
-  if(timerInitiated) {
-    console.log("Timer enabled")
+  if (timerInitiated) {
+    console.log("Timer enabled");
     // Split the string based on the comma and space
-  
-  
-  const timeDiff = computeReminderTimeout(time)
-  const reminderTimeout = timeDiff;
-  
-  setTimeout(() => {
-    playAlarm(reminderContent);
-  }, reminderTimeout);
-  }else {
-    console.log("Timer not enabled")
+
+    const timeDiff = computeReminderTimeout(time);
+    const reminderTimeout = timeDiff;
+
+    setTimeout(() => {
+      playAlarm(reminderContent);
+    }, reminderTimeout);
+  } else {
+    console.log("Timer not enabled");
   }
 }
 
@@ -67,7 +66,6 @@ function computeReminderTimeout(time) {
   const hours = parseInt(timeComponents[0], 10);
   const minutes = parseInt(timeComponents[1], 10);
 
-
   const targetTime = new Date();
   targetTime.setHours(hours, minutes, 0, 0);
   const currentTime = new Date();
@@ -81,12 +79,12 @@ function toggleTimePicker() {
   if (switchTime.checked) {
     timePickerContainer.style.display = "block";
     timerInitiated = true;
-    localStorage.setItem("timerInitiated", JSON.stringify(timerInitiated))
+    localStorage.setItem("timerInitiated", JSON.stringify(timerInitiated));
   } else {
     timePickerContainer.style.display = "none";
     selectedTime.value = null;
     timerInitiated = false;
-    localStorage.setItem("timerInitiated", JSON.stringify(timerInitiated))
+    localStorage.setItem("timerInitiated", JSON.stringify(timerInitiated));
   }
 }
 
@@ -139,7 +137,7 @@ function createReminderListItem(reminderText, reminderTime) {
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
   checkbox.className = "taskCheckbox";
-  
+
   listItem.innerHTML = `
     <div class="reminderData">
     <span class="reminderText">${reminderText}</span></div><div class="reminderButtons"><span class="reminderTime">${
@@ -156,7 +154,7 @@ function createReminderListItem(reminderText, reminderTime) {
 
   listItem.insertBefore(checkbox, listItem.firstChild);
 
-  if(computeReminderTimeout(reminderTime) <= 0){
+  if (computeReminderTimeout(reminderTime) <= 0) {
     listItem.remove();
     saveRemindersToLocalStorage();
   }
@@ -193,17 +191,16 @@ function createReminderListItem(reminderText, reminderTime) {
         "line-through";
       listItem.remove();
       saveRemindersToLocalStorage();
-      if(timerInitiated) {
-        if(alarmSound.paused) {
+      if (timerInitiated) {
+        if (alarmSound.paused) {
           notCancelled = false;
-          localStorage.setItem("notCancelled", notCancelled)
-        }else {
+          localStorage.setItem("notCancelled", notCancelled);
+        } else {
           stopAlarm();
         }
-      };
+      }
     }
   });
-
 
   return listItem;
 }
@@ -270,24 +267,24 @@ function formatDate(date) {
 }
 
 function playAlarm(text) {
-  if(localStorage.getItem("notCancelled") === "true") {
+  if (localStorage.getItem("notCancelled") === "true") {
     alarmSound.play();
-  const notification = document.getElementById("notifications");
+    const notification = document.getElementById("notifications");
 
-  document.getElementById('reminderContent').textContent = text;
-  notification.style.display = "block";
+    document.getElementById("reminderContent").textContent = text;
+    notification.style.display = "block";
   }
 }
 
 function stopAlarm() {
-  console.log("Triggering")
+  console.log("Triggering");
   const notification = document.getElementById("notifications");
   alarmSound.pause();
   notification.style.display = "none";
   notCancelled = false;
-  localStorage.setItem('notCancelled', notCancelled);
+  localStorage.setItem("notCancelled", notCancelled);
   setTimeout(() => {
-    renderReminders()
+    renderReminders();
   }, 1000);
 }
 
@@ -300,10 +297,9 @@ window.addEventListener("beforeunload", function () {
   clearInterval(reminderInterval);
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-  function renderReminders() {
-    const reminders = JSON.parse(localStorage.getItem("reminders")) || {};
-  console.log(reminders)
+function renderReminders() {
+  const reminders = JSON.parse(localStorage.getItem("reminders")) || {};
+  console.log(reminders);
   // Iterate over the keys (date strings) of the reminders object
   Object.keys(reminders).forEach((dateString) => {
     const formattedDate = new Date(dateString);
@@ -314,13 +310,15 @@ document.addEventListener("DOMContentLoaded", function () {
       const reminderItem = createReminderListItem(text, time);
       reminderList.appendChild(reminderItem);
 
-      if(time) {
+      if (time) {
         setTimeout(() => {
           playAlarm(text);
         }, computeReminderTimeout(time));
       }
     });
   });
-  }
-  renderReminders()
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  renderReminders();
 });
