@@ -1,6 +1,5 @@
 let reminderInterval;
-let timerInitiated =
-  JSON.parse(localStorage.getItem("timerInitiated")) || false;
+let timerInitiated = false;
 let notCancelled = localStorage.getItem("notCancelled") || true;
 localStorage.setItem("notCancelled", notCancelled);
 const reminderInput = document.getElementById("reminderInput");
@@ -17,8 +16,25 @@ function addReminder(time) {
   const reminderText = reminderInput.value;
   const reminderTimeField = document.getElementById("timePicker");
   if (reminderTimeField.value === null || reminderTimeField.value == "") {
-    alert("Set a time for your reminder.");
-    return;
+    const warningText = prompt(
+      "Are you sure you want to add reminder without a timer? Y/N:",
+      "N"
+    );
+
+    if (
+      warningText.toUpperCase() === "Y" ||
+      warningText.toUpperCase() === "YES"
+    ) {
+      alert("Reminder added without a timer");
+    } else if (
+      warningText.toUpperCase() === "N" ||
+      warningText.toUpperCase() === "NO"
+    ) {
+      return;
+    } else {
+      alert("Your reminder was not added because you provided a wrong value.");
+      return;
+    }
   }
   const reminderTime = time
     ? setReminder(time)
@@ -58,22 +74,26 @@ function setReminderTimeout(time, reminderContent) {
 }
 
 function computeReminderTimeout(time) {
-  const returnedTime = time.split(", ");
+  if (timerInitiated) {
+    const returnedTime = time.split(", ");
 
-  // Extract the time part
-  const newTime = returnedTime[1];
+    // Extract the time part
+    const newTime = returnedTime[1];
 
-  // Split the time part based on the colon
-  const timeComponents = newTime.split(":");
+    // Split the time part based on the colon
+    const timeComponents = newTime.split(":");
 
-  // Extract hours and minutes
-  const hours = parseInt(timeComponents[0], 10);
-  const minutes = parseInt(timeComponents[1], 10);
+    // Extract hours and minutes
+    const hours = parseInt(timeComponents[0], 10);
+    const minutes = parseInt(timeComponents[1], 10);
 
-  const targetTime = new Date();
-  targetTime.setHours(hours, minutes, 0, 0);
-  const currentTime = new Date();
-  return targetTime - currentTime;
+    const targetTime = new Date();
+    targetTime.setHours(hours, minutes, 0, 0);
+    const currentTime = new Date();
+    return targetTime - currentTime;
+  } else {
+    console.log("Compute failed, time not found");
+  }
 }
 
 function toggleTimePicker() {
