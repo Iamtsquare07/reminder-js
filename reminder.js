@@ -1,8 +1,7 @@
 let reminderInterval;
 let timerInitiated = JSON.parse(localStorage.getItem('timerInitiated')) || false;
-let notCancelled = JSON.parse(localStorage.getItem('notCancelled')) || true;
-localStorage.setItem('timerInitiated', JSON.stringify(timerInitiated));
-localStorage.setItem('notCancelled', JSON.stringify(notCancelled));
+let notCancelled = localStorage.getItem('notCancelled') || true;
+localStorage.setItem("notCancelled", notCancelled);
 const reminderInput = document.getElementById("reminderInput");
 const listsContainer = document.getElementById("reminderList");
 const alarmSound = document.getElementById("reminderSound");
@@ -30,6 +29,8 @@ function addReminder(time) {
 
   // Clear input field
   reminderInput.value = "";
+  notCancelled = true;
+  localStorage.setItem("notCancelled", notCancelled);
 }
 
 reminderInput.addEventListener("keypress", (e) => {
@@ -138,7 +139,7 @@ function createReminderListItem(reminderText, reminderTime) {
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
   checkbox.className = "taskCheckbox";
-
+  
   listItem.innerHTML = `
     <div class="reminderData">
     <span class="reminderText">${reminderText}</span></div><div class="reminderButtons"><span class="reminderTime">${
@@ -154,6 +155,11 @@ function createReminderListItem(reminderText, reminderTime) {
   `;
 
   listItem.insertBefore(checkbox, listItem.firstChild);
+
+  if(computeReminderTimeout(reminderTime) <= 0){
+    listItem.remove();
+    saveRemindersToLocalStorage();
+  }
 
   if (!isMobileDevice()) {
     listItem.querySelector(".editReminder").addEventListener("click", () => {
@@ -190,13 +196,14 @@ function createReminderListItem(reminderText, reminderTime) {
       if(timerInitiated) {
         if(alarmSound.paused) {
           notCancelled = false;
-          localStorage.setItem("notCancelled", JSON.stringify(notCancelled))
+          localStorage.setItem("notCancelled", notCancelled)
         }else {
           stopAlarm();
         }
       };
     }
   });
+
 
   return listItem;
 }
@@ -263,7 +270,7 @@ function formatDate(date) {
 }
 
 function playAlarm(text) {
-  if(notCancelled) {
+  if(localStorage.getItem("notCancelled") === "true") {
     alarmSound.play();
   const notification = document.getElementById("notifications");
 
@@ -277,6 +284,11 @@ function stopAlarm() {
   const notification = document.getElementById("notifications");
   alarmSound.pause();
   notification.style.display = "none";
+  notCancelled = false;
+  localStorage.setItem('notCancelled', notCancelled);
+  setTimeout(() => {
+    renderReminders()
+  }, 1000);
 }
 
 function formatDateForLocalStorage(dateString) {
@@ -289,7 +301,8 @@ window.addEventListener("beforeunload", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  const reminders = JSON.parse(localStorage.getItem("reminders")) || {};
+  function renderReminders() {
+    const reminders = JSON.parse(localStorage.getItem("reminders")) || {};
   console.log(reminders)
   // Iterate over the keys (date strings) of the reminders object
   Object.keys(reminders).forEach((dateString) => {
@@ -308,4 +321,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
+  }
+  renderReminders()
 });
