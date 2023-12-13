@@ -57,6 +57,16 @@ reminderInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") addReminder();
 });
 
+function clearList() {
+  document.querySelector(".reminderList").innerHTML = ""; // Clear all lists
+  // Clear decisions from localStorage
+  cleardecisionsFromLocalStorage();
+}
+
+function cleardecisionsFromLocalStorage() {
+  localStorage.removeItem("reminders");
+}
+
 function setReminderTimeout(time, reminderContent) {
   if (timerInitiated) {
     console.log("Timer enabled");
@@ -255,6 +265,25 @@ function saveRemindersToLocalStorage() {
   }
 
   localStorage.setItem("reminders", JSON.stringify(reminders));
+
+  // Check if all dates have no values
+  let allDatesEmpty = true;
+  console.log(reminders)
+  const allDates = Object.keys(reminders);
+
+  for (const dateKey of allDates) {
+    const dateValues = reminders[dateKey];
+
+    if (dateValues && dateValues.length > 0) {
+      allDatesEmpty = false;
+      break;
+    }
+  }
+
+  if (allDatesEmpty) {
+    clearList();
+  }
+
 }
 
 function getOrCreateReminderList(date) {
@@ -271,6 +300,7 @@ function getOrCreateReminderList(date) {
 
     // Create a heading for the list with the selected date
     const listHeading = document.createElement("h2");
+    listHeading.className = "listHeading";
     listHeading.textContent = formattedDate;
     reminderList.appendChild(listHeading);
     listsContainer.appendChild(reminderList);
