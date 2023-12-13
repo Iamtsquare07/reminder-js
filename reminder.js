@@ -15,27 +15,40 @@ function addReminder(time) {
 
   const reminderText = reminderInput.value;
   const reminderTimeField = document.getElementById("timePicker");
-  if (reminderTimeField.value === null || reminderTimeField.value == "") {
-    const warningText = prompt(
-      "Are you sure you want to add reminder without a timer? Y/N:",
-      "N"
-    );
+  console.log(time ? true : false);
 
+  time ? console.log("true") : checkPredefinedTime();
+
+  function checkPredefinedTime() {
     if (
-      warningText.toUpperCase() === "Y" ||
-      warningText.toUpperCase() === "YES"
+      reminderTimeField.value === null ||
+      reminderTimeField.value == "" ||
+      time == false
     ) {
-      alert("Reminder added without a timer");
-    } else if (
-      warningText.toUpperCase() === "N" ||
-      warningText.toUpperCase() === "NO"
-    ) {
-      return;
-    } else {
-      alert("Your reminder was not added because you provided a wrong value.");
-      return;
+      const warningText = prompt(
+        "Are you sure you want to add reminder without a timer? Y/N:",
+        "N"
+      );
+
+      if (
+        warningText.toUpperCase() === "Y" ||
+        warningText.toUpperCase() === "YES"
+      ) {
+        alert("Reminder added without a timer");
+      } else if (
+        warningText.toUpperCase() === "N" ||
+        warningText.toUpperCase() === "NO"
+      ) {
+        return;
+      } else {
+        alert(
+          "Your reminder was not added because you provided a wrong value."
+        );
+        return;
+      }
     }
   }
+
   const reminderTime = time
     ? setReminder(time)
     : reminderTimeField.value
@@ -58,7 +71,7 @@ reminderInput.addEventListener("keypress", (e) => {
 });
 
 function clearList() {
-  document.querySelector(".reminderList").innerHTML = ""; // Clear all lists
+  document.querySelector(".listHeading").style.display = "none"; // Clear all lists
   // Clear decisions from localStorage
   cleardecisionsFromLocalStorage();
 }
@@ -73,6 +86,7 @@ function setReminderTimeout(time, reminderContent) {
     // Split the string based on the comma and space
 
     const timeDiff = computeReminderTimeout(time);
+    console.log("Hey "+ computeReminderTimeout(time))
     const reminderTimeout = timeDiff;
 
     setTimeout(() => {
@@ -215,10 +229,6 @@ function createReminderListItem(reminderText, reminderTime) {
     });
   }
 
-  function isMobileDevice() {
-    return window.innerWidth < 768;
-  }
-
   checkbox.addEventListener("change", () => {
     if (checkbox.checked) {
       listItem.querySelector(".reminderText").style.textDecoration =
@@ -237,6 +247,10 @@ function createReminderListItem(reminderText, reminderTime) {
   });
 
   return listItem;
+}
+
+function isMobileDevice() {
+  return window.innerWidth < 768;
 }
 
 function saveRemindersToLocalStorage() {
@@ -268,7 +282,6 @@ function saveRemindersToLocalStorage() {
 
   // Check if all dates have no values
   let allDatesEmpty = true;
-  console.log(reminders)
   const allDates = Object.keys(reminders);
 
   for (const dateKey of allDates) {
@@ -283,7 +296,6 @@ function saveRemindersToLocalStorage() {
   if (allDatesEmpty) {
     clearList();
   }
-
 }
 
 function getOrCreateReminderList(date) {
@@ -306,6 +318,7 @@ function getOrCreateReminderList(date) {
     listsContainer.appendChild(reminderList);
   }
 
+  document.querySelector(".listHeading").style.display = "block";
   return reminderList;
 }
 
@@ -353,7 +366,6 @@ window.addEventListener("beforeunload", function () {
 
 function renderReminders() {
   const reminders = JSON.parse(localStorage.getItem("reminders")) || {};
-  console.log(reminders);
   // Iterate over the keys (date strings) of the reminders object
   Object.keys(reminders).forEach((dateString) => {
     const formattedDate = new Date(dateString);
